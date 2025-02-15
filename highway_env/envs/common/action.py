@@ -341,4 +341,9 @@ def action_factory(env: AbstractEnv, config: dict) -> ActionType:
     elif config["type"] == "MultiAgentAction":
         return MultiAgentAction(env, **config)
     else:
-        raise ValueError("Unknown action type")
+        other_action_type = None
+        try:
+            other_action_type = utils.class_from_path(config["type"])
+        except:
+            raise ValueError("Unknown action type")
+        return other_action_type(env, **config)
